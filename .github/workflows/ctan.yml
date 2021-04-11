@@ -18,9 +18,19 @@ jobs:
         run: |
           sudo wget https://gitlab.com/Lotz/pkgcheck/raw/master/bin/pkgcheck -q --output-document=/usr/local/bin/pkgcheck
           sudo chmod a+x /usr/local/bin/pkgcheck
+      - name: build pdf manual 1/2
+        uses: dante-ev/latex-action@master
+        with:
+          root_file: xcref.ins
+          compiler: pdflatex
+      - name: build pdf manual 2/2
+        uses: dante-ev/latex-action@master
+        with:
+          root_file: xcref.ins
+          compiler: pdflatex
       - name: create release
         run: |
-          ctanify --notds README.md build.lua xcref.dtx xcref.ins examples/example-french.tex examples/example-ngerman.tex 
+          ctanify --notds README.md build.lua xcref.dtx xcref.ins xcref.pdf "examples/*.tex=doc/latex/xcref"
       - name: check release
         run: |
           pkgchceck xcref.tar.gz
