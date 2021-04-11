@@ -10,7 +10,7 @@ jobs:
         working-directory: /tmp
         run: |
           sudo apt-get -q update
-          sudo apt-get -q install -y libfile-copy-recursive-perl
+          sudo apt-get install -qy -o=Dpkg::Use-Pty=0  libfile-copy-recursive-perl
           wget http://mirrors.ctan.org/install/support/ctanify.tds.zip
           unzip ctanify.tds.zip
           sudo mv scripts/ctanify/ctanify /usr/local/bin
@@ -20,7 +20,7 @@ jobs:
           sudo chmod a+x /usr/local/bin/pkgcheck
       - name: create release
         run: |
-          ctanify --notds LICENSE README.md xcref.dtx xcref.ins examples/example-french.tex examples/example-ngerman.tex 
+          ctanify --notds README.md build.lua xcref.dtx xcref.ins examples/example-french.tex examples/example-ngerman.tex 
       - name: check release
         run: |
           pkgchceck xcref.tar.gz
