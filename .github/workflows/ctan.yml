@@ -9,15 +9,15 @@ jobs:
       - name: prepare ctanify
         working-directory: /tmp
         run: |
-          apt-get update
-          apt-get install -qy libfile-copy-recursive-perl
+          sudo apt-get update
+          sudo apt-get install -qy libfile-copy-recursive-perl
           wget http://mirrors.ctan.org/install/support/ctanify.tds.zip
           unzip ctanfiy.tds.zip
-          mv scripts/ctanify/ctanify /usr/local/bin
+          sudo mv scripts/ctanify/ctanify /usr/local/bin
       - name: prepare pkgchceck
         run: |
-          wget https://gitlab.com/Lotz/pkgcheck/raw/master/bin/pkgcheck -q --output-document=/usr/local/bin/pkgcheck
-          chmod a+x /usr/local/bin/pkgcheck
+          sudo wget https://gitlab.com/Lotz/pkgcheck/raw/master/bin/pkgcheck -q --output-document=/usr/local/bin/pkgcheck
+          sudo chmod a+x /usr/local/bin/pkgcheck
       - name: create release
         run: |
           ctanify --notds LICENSE README.md xcref.dtx xcref.ins examples/example-french.tex examples/example-ngerman.tex 
