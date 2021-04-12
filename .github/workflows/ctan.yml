@@ -1,0 +1,36 @@
+name: CTAN
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  ctan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: prepare ctanify
+        working-directory: /tmp
+        run: |
+          sudo apt-get -q update
+          sudo apt-get install -qy -o=Dpkg::Use-Pty=0  libfile-copy-recursive-perl
+          wget http://mirrors.ctan.org/install/support/ctanify.tds.zip
+          unzip ctanify.tds.zip
+          sudo mv scripts/ctanify/ctanify /usr/local/bin
+      - name: prepare pkgchceck
+        run: |
+          sudo wget https://gitlab.com/Lotz/pkgcheck/raw/master/bin/pkgcheck -q --output-document=/usr/local/bin/pkgcheck
+          sudo chmod a+x /usr/local/bin/pkgcheck
+      - name: build pdf manual
+        uses: dante-ev/latex-action@edge
+        with:
+          root_file: xcref.ins
+          compiler: l3build
+          args: doc
+      - name: create release
+        run: |
+          ctanify --notds README.md build.lua xcref.dtx xcref.ins xcref.pdf "examples/*.tex=doc/latex/xcref"
+      - name: check release
+        run: |
+          pkgchceck xcref.tar.gz
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ctan
+          path: xcref.tar.gz
