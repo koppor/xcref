@@ -19,7 +19,7 @@ jobs:
           sudo wget https://gitlab.com/Lotz/pkgcheck/raw/master/bin/pkgcheck -q --output-document=/usr/local/bin/pkgcheck
           sudo chmod a+x /usr/local/bin/pkgcheck
       - name: build pdf manual
-        uses: dante-ev/latex-action@master
+        uses: dante-ev/latex-action@edge
         with:
           root_file: xcref.ins
           compiler: l3build
